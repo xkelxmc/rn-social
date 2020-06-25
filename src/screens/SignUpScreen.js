@@ -1,122 +1,123 @@
-import React, {useState} from "react";
-import {View, Text, StyleSheet, ScrollView, TextInput, Button, Alert} from "react-native";
-import {useDispatch, useSelector} from "react-redux";
-import {signUp} from "../store/user/actions";
-import {AppLoader} from "../components/AppLoader";
-import {userReducer} from "../store/user/reducer";
+import React, { useState } from 'react';
+import { View, StyleSheet, TextInput, Alert, ScrollView } from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
+import { signUp } from '../store/user/actions';
+import { AppLoader } from '../components/AppLoader';
+import { userReducer } from '../store/user/reducer';
+import { AppButton } from '../components/AppButton';
 
 const initialUser = {
-    email: "",
-    password: "",
-    confirmPassword: "",
-    name: "",
-    lastName: ""
+    email: '',
+    password: '',
+    confirmPassword: '',
+    name: '',
+    lastName: '',
 };
 
-export const SignUpScreen = ({navigation}) => {
+export const SignUpScreen = ({ navigation }) => {
     const [userInfo, setUserInfo] = useState(initialUser);
-    const user = useSelector(state => state.user.reducer);
+    const user = useSelector((state) => state.user);
     const dispatch = useDispatch();
     const handleSignUp = () => {
-        if(userInfo.password === userInfo.confirmPassword) {
+        if (userInfo.password === userInfo.confirmPassword) {
             dispatch(userReducer.actions.reset());
-            dispatch(signUp({
-                email: userInfo.email,
-                name: userInfo.name,
-                lastName: userInfo.lastName,
-                password: userInfo.password,
-            }));
+            dispatch(
+                signUp({
+                    email: userInfo.email,
+                    name: userInfo.name,
+                    lastName: userInfo.lastName,
+                    password: userInfo.password,
+                })
+            );
         } else {
-            Alert.alert("Ошибка", "Пароли не совпадают");
+            Alert.alert('Ошибка', 'Пароли не совпадают');
         }
     };
     const handleChangeUser = (field) => (text) => {
-        setUserInfo(prev => ({...prev, [field]: text}));
+        setUserInfo((prev) => ({ ...prev, [field]: text }));
     };
 
-    if(user.isLoading) {
-        return (
-            <AppLoader/>
-        );
+    if (user.isLoading) {
+        return <AppLoader />;
     }
 
     return (
-        <ScrollView>
-            <View style={styles.root}>
-                {/*<Text>{JSON.stringify(user)}</Text>*/}
-                <View style={styles.textWrapper}>
+        <View style={styles.root}>
+            {/*<Text>{JSON.stringify(user)}</Text>*/}
+            <ScrollView>
+                <View style={styles.container}>
                     <TextInput
                         style={styles.inputText}
-                        placeholder={"Имя"}
+                        placeholder={'Имя'}
+                        placeholderTextColor={'rgba(0,0,0,0.54)'}
                         value={userInfo.name}
-                        onChangeText={handleChangeUser("name")}
+                        onChangeText={handleChangeUser('name')}
                         autoCorrect={false}
                     />
-                </View>
-                <View style={styles.textWrapper}>
                     <TextInput
                         style={styles.inputText}
-                        placeholder={"Фамилия"}
+                        placeholder={'Фамилия'}
+                        placeholderTextColor={'rgba(0,0,0,0.54)'}
                         value={userInfo.lastName}
-                        onChangeText={handleChangeUser("lastName")}
+                        onChangeText={handleChangeUser('lastName')}
                         autoCorrect={false}
                     />
-                </View>
-                <View style={styles.textWrapper}>
                     <TextInput
                         style={styles.inputText}
-                        placeholder={"Email"}
+                        placeholder={'Email'}
+                        placeholderTextColor={'rgba(0,0,0,0.54)'}
                         value={userInfo.email}
-                        onChangeText={handleChangeUser("email")}
-                        autoCapitalize={"none"}
+                        onChangeText={handleChangeUser('email')}
+                        autoCapitalize={'none'}
                         autoCorrect={false}
-                        keyboardType={"email-address"}
+                        keyboardType={'email-address'}
                     />
-                </View>
-                <View style={styles.textWrapper}>
                     <TextInput
                         style={styles.inputText}
-                        placeholder={"Пароль"}
+                        placeholder={'Пароль'}
+                        placeholderTextColor={'rgba(0,0,0,0.54)'}
                         value={userInfo.password}
-                        onChangeText={handleChangeUser("password")}
-                        autoCapitalize={"none"}
+                        onChangeText={handleChangeUser('password')}
+                        autoCapitalize={'none'}
                         autoCorrect={false}
                         secureTextEntry={true}
                     />
-                </View>
-                <View style={styles.textWrapper}>
                     <TextInput
                         style={styles.inputText}
-                        placeholder={"Повторите пароль"}
+                        placeholder={'Повторите пароль'}
+                        placeholderTextColor={'rgba(0,0,0,0.54)'}
                         value={userInfo.confirmPassword}
-                        onChangeText={handleChangeUser("confirmPassword")}
-                        autoCapitalize={"none"}
+                        onChangeText={handleChangeUser('confirmPassword')}
+                        autoCapitalize={'none'}
                         autoCorrect={false}
                         secureTextEntry={true}
                     />
+                    <AppButton onPress={handleSignUp} title={'Регистрация'} />
+                    <AppButton
+                        onPress={() => navigation.navigate('LoginScreen')}
+                        title={'Войти'}
+                    />
                 </View>
-                <Button onPress={handleSignUp} title={"Регистрация"} />
-                <Button onPress={() => navigation.navigate("LoginScreen")} title={"Войти"} />
-            </View>
-        </ScrollView>
+            </ScrollView>
+        </View>
     );
 };
 
 const styles = StyleSheet.create({
     inputText: {
-        width: "80%",
-        borderBottomWidth: 2,
-        borderBottomColor: "#cccccc",
+        borderBottomColor: 'rgba(0, 0, 0, 0.42)',
+        borderBottomWidth: 1,
         height: 55,
         marginBottom: 16,
+        width: '100%',
     },
     root: {
+        alignItems: 'center',
         flex: 1,
-        justifyContent: "center",
-        alignItems: "center"
+        justifyContent: 'center',
+        backgroundColor: '#ffffff',
     },
-    textWrapper: {
-        width: "100%",
-        alignItems: "center",
+    container: {
+        width: 200,
     },
 });

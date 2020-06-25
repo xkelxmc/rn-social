@@ -1,76 +1,78 @@
-import React, {useState} from "react";
-import {ScrollView, View, StyleSheet, Button, TextInput, Text} from "react-native";
-import {useDispatch, useSelector} from "react-redux";
-import {login} from "../store/user/actions";
-import {AppLoader} from "../components/AppLoader";
-import {userReducer} from "../store/user/reducer";
+import React, { useState } from 'react';
+import { View, StyleSheet, TextInput } from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
+import { login } from '../store/user/actions';
+import { AppLoader } from '../components/AppLoader';
+import { userReducer } from '../store/user/reducer';
+import { AppButton } from '../components/AppButton';
 
-export const LoginScreen = ({navigation}) => {
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const user = useSelector(state => state.user.reducer);
+export const LoginScreen = ({ navigation }) => {
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const user = useSelector((state) => state.user);
     const dispatch = useDispatch();
     const handleLogin = () => {
         dispatch(userReducer.actions.reset());
-        dispatch(login({email, password}));
+        dispatch(login({ email, password }));
     };
 
-    if(user.isLoading) {
-        return (
-            <AppLoader/>
-        );
+    if (user.isLoading) {
+        return <AppLoader />;
     }
 
     return (
-        <ScrollView>
-            <View style={styles.root}>
-                {/*<Text>{JSON.stringify(user)}</Text>*/}
-
-                <View style={styles.textWrapper}>
-                    <TextInput
-                        style={styles.inputText}
-                        placeholder={"Email"}
-                        value={email}
-                        onChangeText={setEmail}
-                        autoCapitalize={"none"}
-                        autoCorrect={false}
-                        keyboardType={"email-address"}
-                    />
-                </View>
-                <View style={styles.textWrapper}>
-                    <TextInput
-                        style={styles.inputText}
-                        placeholder={"Пароль"}
-                        value={password}
-                        onChangeText={setPassword}
-                        autoCapitalize={"none"}
-                        autoCorrect={false}
-                        secureTextEntry={true}
-                    />
-                </View>
-                <Button onPress={handleLogin} title={"Войти"} />
-                <Button onPress={() => navigation.navigate("SignUpScreen")} title={"Регистрация"} />
-                <Button onPress={() => navigation.navigate("TestScreen")} title={"test"} />
+        <View style={styles.root}>
+            {/*<Text>{JSON.stringify(user)}</Text>*/}
+            <View style={styles.container}>
+                <TextInput
+                    style={styles.inputText}
+                    placeholder={'Email'}
+                    placeholderTextColor={'rgba(0,0,0,0.54)'}
+                    value={email}
+                    onChangeText={setEmail}
+                    autoCapitalize={'none'}
+                    autoCorrect={false}
+                    keyboardType={'email-address'}
+                />
+                <TextInput
+                    style={styles.inputText}
+                    placeholder={'Пароль'}
+                    placeholderTextColor={'rgba(0,0,0,0.54)'}
+                    value={password}
+                    onChangeText={setPassword}
+                    autoCapitalize={'none'}
+                    autoCorrect={false}
+                    secureTextEntry={true}
+                />
+                <AppButton onPress={handleLogin} title={'Войти'} />
+                <AppButton
+                    onPress={() => navigation.navigate('SignUpScreen')}
+                    title={'Регистрация'}
+                />
+                <AppButton
+                    onPress={() => navigation.navigate('TestScreen')}
+                    title={'test'}
+                />
             </View>
-        </ScrollView>
+        </View>
     );
 };
 
 const styles = StyleSheet.create({
     inputText: {
-        width: "80%",
-        borderBottomWidth: 2,
-        borderBottomColor: "#cccccc",
-        height: 55,
+        borderBottomColor: 'rgba(0, 0, 0, 0.42)',
+        borderBottomWidth: 1,
+        height: 48,
         marginBottom: 16,
+        width: '100%',
+    },
+    container: {
+        width: 200,
     },
     root: {
         flex: 1,
-        justifyContent: "center",
-        alignItems: "center"
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: '#ffffff',
     },
-    textWrapper: {
-        width: "100%",
-        alignItems: "center",
-    }
 });

@@ -1,10 +1,10 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { signUp, login, logout, logoutAll, getCurrentUser } from './actions';
+import { fetchAll, findOne } from './actions';
 
-const initialState = { user: null, isLoading: false, error: null, token: null };
+const initialState = { list: [], user: null, isLoading: false, error: null };
 
-export const userReducer = createSlice({
-    name: 'user',
+export const usersReducer = createSlice({
+    name: 'users',
     initialState: initialState,
     reducers: {
         reset: () => initialState,
@@ -14,22 +14,15 @@ export const userReducer = createSlice({
     },
     extraReducers: (builder) =>
         builder
-            .addCase(signUp.fulfilled, (state, action) => {
-                state.user = action.payload.newUser;
-                state.token = action.payload.token;
+            .addCase(fetchAll.fulfilled, (state, action) => {
+                state.list = action.payload;
             })
-            .addCase(login.fulfilled, (state, action) => {
-                state.user = action.payload.user;
-                state.token = action.payload.token;
-            })
-            .addCase(getCurrentUser.fulfilled, (state, action) => {
+            .addCase(findOne.fulfilled, (state, action) => {
                 state.user = action.payload;
             })
-            .addCase(logout.fulfilled, () => initialState)
-            .addCase(logoutAll.fulfilled, () => initialState)
             .addMatcher(
                 (action) =>
-                    action.type.startsWith('user/') &&
+                    action.type.startsWith('users/') &&
                     action.type.endsWith('/fulfilled') &&
                     'requestId' in action.meta,
                 (state) => {
@@ -38,7 +31,7 @@ export const userReducer = createSlice({
             )
             .addMatcher(
                 (action) =>
-                    action.type.startsWith('user/') &&
+                    action.type.startsWith('users/') &&
                     action.type.endsWith('/pending') &&
                     'requestId' in action.meta,
                 (state) => {
@@ -48,7 +41,7 @@ export const userReducer = createSlice({
             )
             .addMatcher(
                 (action) =>
-                    action.type.startsWith('user/') &&
+                    action.type.startsWith('users/') &&
                     action.type.endsWith('/rejected') &&
                     'requestId' in action.meta,
                 (state, action) => {

@@ -6,7 +6,8 @@
     },
     "extends": [
         "eslint:recommended",
-        "plugin:react/recommended"
+        "plugin:react/recommended",
+        "plugin:prettier/recommended"
     ],
     "parser": "babel-eslint",
     "parserOptions": {
@@ -19,39 +20,19 @@
     },
     "plugins": [
         "react",
-        "react-native"
+        "react-native",
+        "prettier"
     ],
     "rules": {
-        "indent": [
-            "error",
-            4
-        ],
-        "linebreak-style": [
-            "error",
-            "unix"
-        ],
-        "quotes": [
-            "error",
-            "double"
-        ],
-        "semi": [
-            "error",
-            "always"
-        ],
+        "prettier/prettier": ["error", {"singleQuote": true, "parser": "flow", "tabWidth":  4}],
         "react/prop-types": 0,
         "no-unused-vars": 1,
         "react-native/no-unused-styles": 2,
         "react-native/split-platform-components": 2,
         "react-native/no-inline-styles": 2,
-        "react-native/no-color-literals": 2,
+        "react-native/no-color-literals": 0,
         "react-native/no-raw-text": 2,
-        "react-native/sort-styles": [
-            "error",
-            "asc",
-            {
-                "ignoreClassNames": false,
-                "ignoreStyleProperties": true
-            }
-        ]
+        "react-native/sort-styles": 0,
+        "react/display-name": 0
     }
 }

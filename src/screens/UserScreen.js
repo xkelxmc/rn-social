@@ -1,5 +1,5 @@
-import React from "react";
-import {View, Text, StyleSheet} from "react-native";
+import React from 'react';
+import { View, Text, StyleSheet } from 'react-native';
 
 export const UserScreen = () => {
     return (
@@ -11,8 +11,8 @@ export const UserScreen = () => {
 
 const styles = StyleSheet.create({
     root: {
+        alignItems: 'center',
         flex: 1,
-        justifyContent: "center",
-        alignItems: "center"
+        justifyContent: 'center',
     },
 });
