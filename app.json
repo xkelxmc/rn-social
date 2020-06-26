@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "rn-social",
+    "name": "RN Social",
     "slug": "rn-social",
     "platforms": [
       "ios",
@@ -22,7 +22,15 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
-    }
+      "supportsTablet": true,
+      "bundleIdentifier": "com.xkelxmc.rn-social",
+      "buildNumber": "1.0.0"
+    },
+    "android": {
+      "package": "com.xkelxmc.rn_social",
+      "versionCode": 1
+    },
+    "description": "",
+    "githubUrl": "https://github.com/xkelxmc/rn-social"
   }
 }
