@@ -1,14 +1,35 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 
-export const AppCard = ({ item }) => {
+export const AppCard = ({ item, like, disLike }) => {
     return (
         <View style={styles.root}>
             <Text style={styles.title}>{item.title}</Text>
             <Text style={styles.bodyText}>{item.body}</Text>
-            <View>
-                <Text>{item.upvoters.length}</Text>
-                <Text>{item.downvoters.length}</Text>
+            <View style={styles.likesWrapper}>
+                <View style={styles.likeItem}>
+                    <TouchableOpacity onPress={like}>
+                        <Ionicons
+                            name="md-thumbs-up"
+                            size={24}
+                            color={'#666666'}
+                        />
+                    </TouchableOpacity>
+                    <Text style={styles.likeCount}>{item.upvoters.length}</Text>
+                </View>
+                <View style={styles.likeItem}>
+                    <TouchableOpacity onPress={disLike}>
+                        <Ionicons
+                            name="md-thumbs-down"
+                            size={24}
+                            color={'#666666'}
+                        />
+                    </TouchableOpacity>
+                    <Text style={styles.likeCount}>
+                        {item.downvoters.length}
+                    </Text>
+                </View>
             </View>
         </View>
     );
@@ -42,5 +63,18 @@ const styles = StyleSheet.create({
         fontSize: 14,
         lineHeight: 20,
         color: 'rgba(0, 0, 0, 0.87)',
+    },
+    likesWrapper: {
+        paddingTop: 12,
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    likeItem: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginRight: 12,
+    },
+    likeCount: {
+        marginLeft: 8,
     },
 });

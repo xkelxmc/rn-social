@@ -14,7 +14,7 @@ const logger = (store) => (next) => (action) => {
     return result;
 };
 
-const middlewareEnhancer = applyMiddleware(thunkMiddleware);
+const middlewareEnhancer = applyMiddleware(logger, thunkMiddleware);
 
 const rootReducer = combineReducers({
     user: userReducer.reducer,

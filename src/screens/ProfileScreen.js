@@ -3,7 +3,12 @@ import { View, Text, StyleSheet, FlatList } from 'react-native';
 import { AppButton } from '../components/AppButton';
 import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '../store/user/actions';
-import { findByUserId, createPost } from '../store/posts/actions';
+import {
+    findByUserId,
+    createPost,
+    upVote,
+    downVote,
+} from '../store/posts/actions';
 import { AppLoader } from '../components/AppLoader';
 import { AppCard } from '../components/AppCard';
 import { UserBadge } from '../components/UserBadge';
@@ -35,18 +40,20 @@ export const ProfileScreen = ({ navigation }) => {
         dispatch(logout());
     };
 
-    const newPost = {
-        title: 'Test Title 2',
-        body:
-            'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Risus in hendrerit gravida rutrum quisque non. Pulvinar etiam non quam lacus suspendisse faucibus interdum posuere. Sed risus ultricies tristique nulla aliquet enim tortor at auctor. Neque volutpat ac tincidunt vitae. Sed turpis tincidunt id aliquet. Morbi blandit cursus risus at ultrices mi tempus imperdiet. Egestas quis ipsum suspendisse ultrices gravida. Massa massa ultricies mi quis hendrerit. Tortor aliquam nulla facilisi cras fermentum odio eu feugiat pretium. Facilisis leo vel fringilla est ullamcorper eget nulla facilisi etiam. Volutpat consequat mauris nunc congue nisi vitae suscipit tellus mauris. Hac habitasse platea dictumst quisque sagittis purus sit amet. Netus et malesuada fames ac turpis egestas maecenas.',
-    };
     const handleCreatePost = () => {
-        dispatch(createPost(newPost));
+        navigation.navigate('NewPostScreen');
     };
 
     if (user.isLoading) {
         return <AppLoader />;
     }
+
+    const handleLike = (post) => () => {
+        dispatch(upVote({ postId: post._id }));
+    };
+    const handleDisLike = (post) => () => {
+        dispatch(downVote({ postId: post._id }));
+    };
     return (
         <View style={styles.root}>
             <View style={styles.profileWrapper}>
@@ -70,7 +77,11 @@ export const ProfileScreen = ({ navigation }) => {
                             <FlatList
                                 data={posts.list}
                                 renderItem={({ item }) => (
-                                    <AppCard item={item} />
+                                    <AppCard
+                                        item={item}
+                                        like={handleLike(item)}
+                                        disLike={handleDisLike(item)}
+                                    />
                                 )}
                                 keyExtractor={(item) => item._id}
                             />
@@ -94,7 +105,7 @@ const styles = StyleSheet.create({
     cardsWrapper: {
         paddingHorizontal: 20,
         paddingVertical: 12,
-        paddingBottom: 100,
+        paddingBottom: 140,
     },
     profileWrapper: {
         borderBottomWidth: 1,

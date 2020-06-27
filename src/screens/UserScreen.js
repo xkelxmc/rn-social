@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { View, Text, StyleSheet, FlatList } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
-import { findByUserId } from '../store/posts/actions';
+import { downVote, findByUserId, upVote } from '../store/posts/actions';
 import { UserBadge } from '../components/UserBadge';
 import { AppLoader } from '../components/AppLoader';
 import { AppCard } from '../components/AppCard';
@@ -25,6 +25,13 @@ export const UserScreen = ({ route, navigation }) => {
     useEffect(() => {
         dispatch(findByUserId({ userId: currentUser._id }));
     }, [posts.post]);
+
+    const handleLike = (post) => () => {
+        dispatch(upVote({ postId: post._id }));
+    };
+    const handleDisLike = (post) => () => {
+        dispatch(downVote({ postId: post._id }));
+    };
     return (
         <View style={styles.root}>
             <View style={styles.profileWrapper}>
@@ -39,7 +46,11 @@ export const UserScreen = ({ route, navigation }) => {
                             <FlatList
                                 data={posts.list}
                                 renderItem={({ item }) => (
-                                    <AppCard item={item} />
+                                    <AppCard
+                                        item={item}
+                                        like={handleLike(item)}
+                                        disLike={handleDisLike(item)}
+                                    />
                                 )}
                                 keyExtractor={(item) => item._id}
                             />

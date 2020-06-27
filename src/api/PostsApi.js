@@ -15,9 +15,9 @@ export class PostsApi {
         return Http.post('/posts/', { title, body }, this.authHeader(token));
     };
     static upVote = ({ postId, token }) => {
-        return Http.get(`/posts/${postId}/up`, this.authHeader(token));
+        return Http.post(`/posts/${postId}/up`, this.authHeader(token));
     };
     static downVote = ({ postId, token }) => {
-        return Http.get(`/posts/${postId}/down`, this.authHeader(token));
+        return Http.post(`/posts/${postId}/down`, this.authHeader(token));
     };
 }
