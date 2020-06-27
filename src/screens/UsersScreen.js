@@ -1,37 +1,48 @@
-import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import React, { useEffect } from 'react';
+import { View, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchAll } from '../store/users/actions';
-import { AppButton } from '../components/AppButton';
+import { AppLoader } from '../components/AppLoader';
+import { UserBadge } from '../components/UserBadge';
 
-export const UsersScreen = () => {
+export const UsersScreen = ({ navigation }) => {
     const users = useSelector((state) => state.users);
     const dispatch = useDispatch();
-    const handleGetUsers = () => {
+    useEffect(() => {
         dispatch(fetchAll());
+    }, []);
+    const gotToUser = (user) => () => {
+        navigation.navigate('UserScreen', user);
     };
     return (
         <View style={styles.root}>
-            <Text>UsersScreen</Text>
-            {users.list.map((item) => (
-                <View key={item._id}>
-                    <Text>
-                        {item.name} {item.lastName} {item.email}
-                    </Text>
-                </View>
-            ))}
-            <AppButton
-                title={'Запросить пользователей'}
-                onPress={handleGetUsers}
-            />
+            {users.isLoading ? (
+                <AppLoader />
+            ) : (
+                <FlatList
+                    data={users.list}
+                    renderItem={({ item }) => (
+                        <TouchableOpacity
+                            style={styles.userItem}
+                            onPress={gotToUser(item)}
+                        >
+                            <UserBadge user={item} />
+                        </TouchableOpacity>
+                    )}
+                    keyExtractor={(item) => item._id}
+                />
+            )}
         </View>
     );
 };
 
 const styles = StyleSheet.create({
     root: {
-        alignItems: 'center',
         flex: 1,
-        justifyContent: 'center',
+        paddingHorizontal: 20,
+        paddingVertical: 12,
+    },
+    userItem: {
+        marginBottom: 12,
     },
 });

@@ -25,7 +25,6 @@ export const UsersNavigation = () => {
                 component={UserScreen}
                 options={{
                     title: 'Профиль пользователя',
-                    headerLeft: null,
                 }}
             />
         </UsersStack.Navigator>
