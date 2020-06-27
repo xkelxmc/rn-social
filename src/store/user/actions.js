@@ -1,5 +1,7 @@
-import { createAsyncThunk } from '@reduxjs/toolkit';
+import { createAction, createAsyncThunk } from '@reduxjs/toolkit';
 import { UserApi } from '../../api/UserApi';
+
+export const restoreToken = createAction('user/restoreToken');
 
 export const signUp = createAsyncThunk('user/singUp', async (data) => {
     const response = await UserApi.signUp(data);

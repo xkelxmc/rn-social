@@ -1,17 +1,18 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { screenOptions } from './screeenOptions';
 import { Ionicons } from '@expo/vector-icons';
-import { Platform } from 'react-native';
+import { Platform, AsyncStorage } from 'react-native';
 import { ProfileNavigation } from './ProfileNavigation';
 import { UsersNavigation } from './UserNavigation';
 import { LoginScreen } from '../screens/LoginScreen';
 import { SignUpScreen } from '../screens/SignUpScreen';
 import { TestScreen } from '../screens/TestScreen';
+import { getCurrentUser, restoreToken } from '../store/user/actions';
 
 const Stack = createStackNavigator();
 const Tab =
@@ -20,8 +21,28 @@ const Tab =
         : createBottomTabNavigator();
 
 export const Navigation = () => {
+    const dispatch = useDispatch();
+    useEffect(() => {
+        const bootstrapAsync = async () => {
+            let userToken;
+
+            try {
+                userToken = await AsyncStorage.getItem('userToken');
+                dispatch(restoreToken(userToken));
+            } catch (e) {
+                // Restoring token failed
+            }
+        };
+
+        bootstrapAsync();
+    }, []);
     const user = useSelector((state) => state.user);
-    if (!user.token) {
+    useEffect(() => {
+        if (!user.user && user.token) {
+            dispatch(getCurrentUser());
+        }
+    }, [user.token, user.user]);
+    if (!user.token || !user.user) {
         return (
             <NavigationContainer>
                 <Stack.Navigator
